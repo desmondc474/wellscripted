@@ -12,6 +12,7 @@ class LexType(Enum):
     KEYWORD = auto()
     IDENTIFIER = auto()
     BRACKET = auto()
+    SEMICOLON = auto()
 
 class LexToken:
     def __init__(self, token_type, value):
@@ -63,6 +64,9 @@ def lex(code):
         elif head in "()[]{}":  # brackets
             res.append(LexToken(LexType.BRACKET,head))
 
+        elif head == ";":
+            res.append(LexToken(LexType.SEMICOLON,head))
+
         elif head in string.punctuation:  # operators
             op = head
             if i >= len(code): pass                
@@ -78,14 +82,15 @@ def lex(code):
     return res
 
 if __name__ == "__main__":
-    test_string = """val collatz = (n: Integer) -> {
-        var ar = [];
-        while (n > 1) ar = ar.tack(n =
-            n % 2 ?
-            1 + 3 * n :
-            n / 2
-        ); return ar;
-    }
-    """
+    test_string = """
+val collatz = (n: Integer) -> {
+    var ar = [];
+    while (n > 1) ar = ar.tack(n =
+        n % 2 ?
+        1 + 3 * n :
+        n / 2
+    ); return ar;
+}
+"""
     print(test_string)
     print(*lex(test_string), sep="\n")
